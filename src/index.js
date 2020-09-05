@@ -1,5 +1,5 @@
 const redux = require('redux');
-
+// Action creator
 const createPolicy = (name, amount) => {
     return {
         type: 'CREATE_POLICY',
@@ -9,13 +9,13 @@ const createPolicy = (name, amount) => {
         }
     }
 };
-
+// Action creator
 const createClaim = (name, amountOfMoneyToCollect) => {
     return {
         type: 'CREATE_CLAIM', payload: { name, amountOfMoneyToCollect, }
     }
 };
-
+// Action creator
 const deletePolicy = (name) => {
     return {
         type: 'DELETE_POLICY',
@@ -25,12 +25,14 @@ const deletePolicy = (name) => {
     }
 }
 
+// Reducer
 const claimsHistory = (oldListOfClaims = [], action) => {
     if (action.type === 'CREATE_CLAIM') {
         return [...oldListOfClaims, action.payload]
     }
     return oldListOfClaims;
 }
+// Reducer
 const accounting = (bagOfMoney = 100, action) => {
     if (action.type === 'CREATE_CLAIM') {
         return bagOfMoney - action.payload.amountOfMoneyToCollect;
@@ -39,7 +41,7 @@ const accounting = (bagOfMoney = 100, action) => {
     }
     return bagOfMoney;
 };
-
+// Reducer
 const policies = (listOfPolicies = [], action) => {
     if (action.type === 'CREATE_POLICY') {
         return [...listOfPolicies, action.payload.name]
@@ -51,16 +53,19 @@ const policies = (listOfPolicies = [], action) => {
     }
     return listOfPolicies;
 };
+// redux functions
 const { createStore, combineReducers } = redux;
+// Combine all redcuers
 const ourDepartments = combineReducers({
     claimsHistory,
     policies,
     accounting,
 });
-
+// Create store
 const store = createStore(ourDepartments);
 const policy1 = createPolicy('john',1000);
 const policy2 = createPolicy('jack',3000);
+// Change state
 store.dispatch(policy1);
 store.dispatch(policy2);
 console.log(store.getState());
